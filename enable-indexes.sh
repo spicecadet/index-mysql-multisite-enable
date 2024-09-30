@@ -16,8 +16,5 @@ BLOG_IDS=$(eval  terminus wp -- $SITE_NAME.$ENVIRONMENT site list --field=blog_i
 # Create an array of sites from the SITES string
 BLOG_ID_ARRAY=( ${=BLOG_IDS} )
 
-for blog_id in ${BLOG_ID_ARRAY} 
-do
-	echo 'Adding Indexes for Site '$blog_id
-	terminus wp -- $SITE_NAME.$ENVIRONMENT index-mysql enable --all --blogid=$blog_id
-done
+# Enable indexes for all blog ids 
+printf "%s\n" "${BLOG_ID_ARRAY[@]}" | xargs -I {} terminus wp -- $SITE_NAME.$ENVIRONMENT index-mysql enable --all --blogid={}
